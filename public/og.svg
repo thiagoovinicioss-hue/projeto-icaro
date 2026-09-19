@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020812"/>
+      <stop offset="0.55" stop-color="#061426"/>
+      <stop offset="1" stop-color="#0b1b31"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F6B73C"/>
+      <stop offset="1" stop-color="#FFD975"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFE9B0"/>
+      <stop offset="0.3" stop-color="#FFD975" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#FF8A24" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <g opacity="0.85">
+    <circle cx="130" cy="90" r="1.6" fill="#BBC5D2"/>
+    <circle cx="300" cy="60" r="1.1" fill="#BBC5D2"/>
+    <circle cx="520" cy="120" r="1.3" fill="#BBC5D2"/>
+    <circle cx="820" cy="70" r="1.5" fill="#BBC5D2"/>
+    <circle cx="1000" cy="140" r="1.2" fill="#BBC5D2"/>
+    <circle cx="1120" cy="80" r="1.4" fill="#BBC5D2"/>
+    <circle cx="200" cy="200" r="1.0" fill="#BBC5D2"/>
+    <circle cx="1050" cy="240" r="1.1" fill="#BBC5D2"/>
+    <circle cx="60" cy="320" r="1.2" fill="#BBC5D2"/>
+    <circle cx="900" cy="180" r="1.0" fill="#BBC5D2"/>
+  </g>
+
+  <circle cx="960" cy="170" r="150" fill="url(#sun)" opacity="0.7"/>
+
+  <path d="M 180 470 C 360 470 470 420 620 380 C 760 340 850 300 940 280
+           L 940 286 C 850 306 760 346 620 386 C 470 426 360 476 180 476 Z"
+        fill="none" stroke="url(#gold)" stroke-width="2.5" opacity="0.55"/>
+
+  <g transform="translate(920 192)">
+    <path d="M 0 -86 L 34 -58 A 18 18 0 0 0 -2 -40 Z" fill="#EDF1F6"/>
+    <path d="M -2 -96 L 18 -84 Z" fill="#F6B73C"/>
+    <rect x="-22" y="-66" width="44" height="12" rx="6" fill="#0e2240"/>
+    <rect x="-24" y="-52" width="48" height="8" rx="4" fill="#F6B73C"/>
+    <rect x="-22" y="-42" width="44" height="48" rx="7" fill="#EDF1F6"/>
+    <path d="M -22 -42 L -34 -24 L -22 -30 Z" fill="#0e2240"/>
+    <path d="M 22 -42 L 34 -24 L 22 -30 Z" fill="#0e2240"/>
+    <path d="M -10 8 L 10 8 L 6 30 L -6 30 Z" fill="#2A3242"/>
+    <circle cx="0" cy="-20" r="4" fill="#FFD975"/>
+    <path d="M -3 40 Q -10 74 0 88 Q 10 74 3 40" fill="url(#gold)" opacity="0.95"/>
+  </g>
+
+  <g transform="translate(80 190)">
+    <circle cx="14" cy="150" r="52" fill="none" stroke="url(#gold)" stroke-width="2" opacity="0.5"
+            stroke-dasharray="2 9"/>
+    <path d="M 14 -20 L 26 18 L 22 62 L 6 62 L 2 18 Z" fill="#F6B73C"/>
+    <circle cx="14" cy="34" r="5" fill="#061426"/>
+    <path d="M 14 54 L 9 80 L 14 96 L 19 80 Z" fill="#FFD975"/>
+  </g>
+
+  <text x="460" y="150" font-family="Georgia, 'Times New Roman', serif" font-size="22" letter-spacing="10" fill="#F6B73C">PROJETO ÍCARO</text>
+  <text x="150" y="220" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700" fill="#F5F7FA">Do chão</text>
+  <text x="150" y="300" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700" fill="#F5F7FA">ao espaço.</text>
+  <text x="152" y="360" font-family="Georgia, 'Times New Roman', serif" font-size="26" letter-spacing="4" fill="#BBC5D2">JORNADA OBAFOG</text>
+
+  <rect x="152" y="414" width="6" height="44" rx="3" fill="#F6B73C"/>
+  <text x="176" y="438" font-family="Arial, sans-serif" font-size="22" fill="#FFD975" font-weight="bold">R$ 800</text>
+  <text x="296" y="438" font-family="Arial, sans-serif" font-size="20" fill="#BBC5D2">para a base e o foguete</text>
+
+  <text x="150" y="556" font-family="Arial, sans-serif" font-size="18" fill="#8B98AA">Apoie o Projeto Ícaro — cada centavo tira o foguete do papel.</text>
+</svg>

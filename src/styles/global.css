@@ -372,9 +372,9 @@ code {
    estado final e estas regras são neutralizadas ali embaixo. */
 
 .mt {
-  --rv: 0;
-  --rvs: 0;
-  --rvp: 0;
+  --rv: 1;
+  --rvs: 1;
+  --rvp: 0.5;
 }
 
 /* Cabeçalho de capítulo: linha dourada que se desenha + kicker + título em mask */

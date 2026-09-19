@@ -35,6 +35,18 @@ export type ScrollMotionOptions = {
   onProgress?: (p: number, s: number, raw: number) => void
 }
 
+/**
+ * Modo "tudo visível": grava o estado final em todo elemento registrado e
+ * desliga o loop de revelação por scroll. Usado para páginas que devem
+ * mostrar o conteúdo inteiro de cara, sem depender de rolagem.
+ */
+let revealImmediate = true
+
+/** Liga/desliga a revelação imediata (sem animação dependente de scroll). */
+export function setRevealImmediate(on: boolean): void {
+  revealImmediate = on
+}
+
 export type StoryMotionOptions = {
   /** Janela de entrada em tempo de mundo (0..1). Padrão: [0, 1]. */
   fromT?: number
@@ -149,6 +161,10 @@ export function registerScrollMotion(
   const onProgress =
     opts.onProgress ??
     ((p: number, s: number, raw: number) => writeVars(el, p, s, raw))
+  if (revealImmediate) {
+    onProgress(1, 1, 0.5)
+    return () => {}
+  }
   const entry: ViewportEntry = {
     el,
     from: opts.from ?? 0.1,
@@ -181,6 +197,10 @@ export function registerStoryMotion(
   const onProgress =
     opts.onProgress ??
     ((p: number, s: number, raw: number) => writeVars(el, p, s, raw))
+  if (revealImmediate) {
+    onProgress(1, 1, 0.5)
+    return () => {}
+  }
   const entry: StoryEntry = {
     el,
     fromT: opts.fromT ?? 0,

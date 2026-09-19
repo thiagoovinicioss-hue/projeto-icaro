@@ -27,7 +27,6 @@ type PhotoFigureProps = {
 export function PhotoFigure({
   src,
   alt,
-  caption,
   pending,
   ratio = 'wide',
   className = '',
@@ -83,7 +82,6 @@ export function PhotoFigure({
           <img src={src} alt={alt} loading="lazy" decoding="async" />
         )}
       </div>
-      {caption && <figcaption className="photo-figure__caption">{caption}</figcaption>}
     </figure>
   )
 }

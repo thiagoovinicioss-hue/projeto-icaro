@@ -1,10 +1,7 @@
-import { useEffect, useRef } from 'react'
 import { campaign } from '../../../data/campaign'
 import { formatBRL } from '../../../utils/money'
 import { chapterIndexById } from '../../../story/chapters'
 import { scrollToChapter } from '../../../utils/navigation'
-import { quality } from '../../../utils/sim'
-import { registerStoryMotion } from '../../../utils/scrollMotion'
 import type { Chapter } from '../../../story/chapters'
 
 /**
@@ -14,21 +11,8 @@ import type { Chapter } from '../../../story/chapters'
  * enquanto a história chega, em vez de um corte seco.
  */
 export function IntroSection({ chapter }: { chapter: Chapter }) {
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el || quality.reducedMotion) return
-    return registerStoryMotion(el, {
-      fromT: 0.02,
-      toT: 0.02,
-      exitFromT: 0.098,
-      exitToT: 0.17,
-    })
-  }, [])
-
   return (
-    <div ref={ref} className="hero-copy hero-copy--exit">
+    <div className="hero-copy">
       <p className="kicker kicker--gold">{chapter.kicker}</p>
       <h1 className="hero-headline">
         <span className="hero-headline__in">

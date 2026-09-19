@@ -15,6 +15,9 @@ const MAX_SPREAD = 0.85
  * nada de fogo. As gotas são um campo procedural (sem estado por partícula):
  * cada direção unitária vive na geometria; o emissor avança com `time*jet`,
  * então ao zerar o jato tudo fica transparente e imóvel.
+ *
+ * Exclusivo dos capítulos da narrativa. A introdução usa CoreStream/WaterSpray
+ * em seu próprio stage e nunca monta este emissor.
  */
 export function WaterJet({ mats }: { mats: RocketMaterials }) {
   const pointsRef = useRef<THREE.Points>(null)

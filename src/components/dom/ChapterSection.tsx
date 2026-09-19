@@ -31,13 +31,13 @@ const KIND_SECTIONS: Record<ChapterKind, ComponentType<{ chapter: Chapter }>> = 
   climax: ClimaxSection,
 }
 
-export function ChapterSection({ chapter, index }: { chapter: Chapter; index?: number }) {
+export function ChapterSection({ chapter, index, omitId = false }: { chapter: Chapter; index?: number; omitId?: boolean }) {
   const Section = KIND_SECTIONS[chapter.kind]
   const titleId = `title-${chapter.id}`
 
   return (
     <section
-      id={chapter.id}
+      id={omitId ? undefined : chapter.id}
       className={`chapter chapter--${chapter.kind} chapter--${chapter.align} chapter--contrast-${chapter.textContrastMode ?? 'dark'}`}
       style={{ '--weight': chapter.weight } as CSSProperties}
       aria-labelledby={chapter.kind === 'intro' ? undefined : titleId}

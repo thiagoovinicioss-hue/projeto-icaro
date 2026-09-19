@@ -15,7 +15,7 @@ function chapterCenterFractions(centers: Record<string, SectionMeasure>) {
 export function measureSections(): Record<string, SectionMeasure> {
   if (typeof document === 'undefined') return {}
   const doc = document.documentElement
-  const vh = sim.viewportH || window.innerHeight || 800
+  const vh = window.innerHeight || 800
   const scrollable = Math.max(1, doc.scrollHeight - vh)
   sim.viewportH = vh
 
@@ -23,8 +23,8 @@ export function measureSections(): Record<string, SectionMeasure> {
   for (const ch of CHAPTERS) {
     const el = document.getElementById(ch.id)
     if (!el) continue
-    const top = el.offsetTop
-    const h = el.offsetHeight
+    const top = el.getBoundingClientRect().top + window.scrollY
+    const h = ch.kind === 'intro' ? vh : el.offsetHeight
     const center = clamp01((top + h / 2 - vh / 2) / scrollable)
     out[ch.id] = { center }
   }

@@ -3,6 +3,7 @@ import { StaticScene } from './components/three/StaticScene'
 import { Navbar } from './components/dom/Navbar'
 import { Footer } from './components/dom/Footer'
 import { StoryRail } from './components/dom/motion/StoryRail'
+import { TransitionStage } from './components/dom/transition/TransitionStage'
 import { ChapterSection } from './components/dom/ChapterSection'
 import { CHAPTERS } from './story/chapters'
 import { useScrollConductor } from './hooks/useScrollConductor'
@@ -10,6 +11,7 @@ import { detectDeviceProfile } from './utils/motion'
 import { initPointerParallax } from './utils/pointer'
 import { quality, sim } from './utils/sim'
 import { supportsWebGL } from './utils/webgl'
+import { transitionState } from './story/transition/stageState'
 
 const EXPERIENCE_DISABLED = false
 
@@ -24,6 +26,20 @@ export function App() {
   useScrollConductor()
 
   const [webglAvailable, setWebglAvailable] = useState(true)
+  const [storySceneActive, setStorySceneActive] = useState(() => new URLSearchParams(location.search).has('stage3d'))
+  useEffect(() => {
+    if (new URLSearchParams(location.search).has('stage3d')) return
+    const update = () => {
+      const section = document.getElementById(CHAPTERS[2].id)
+      setStorySceneActive(!!section && section.getBoundingClientRect().top < window.innerHeight * 1.25)
+      const crew = document.getElementById(CHAPTERS[1].id)
+      transitionState.storyAllowed = !!crew && crew.getBoundingClientRect().bottom <= 0
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update) }
+  }, [])
 
   useEffect(() => {
     document.documentElement.classList.add('app-mounted')
@@ -57,7 +73,7 @@ export function App() {
   return (
     <div className="shell">
       <div className="scene-layer" aria-hidden="true">
-        {EXPERIENCE_DISABLED || !webglAvailable ? (
+        {EXPERIENCE_DISABLED || !webglAvailable || !storySceneActive ? (
           <StaticScene />
         ) : (
           <Suspense fallback={<StaticScene />}>
@@ -74,11 +90,13 @@ export function App() {
       <StoryRail />
 
       <main className="story" id="conteudo">
-        {CHAPTERS.map((chapter, index) => (
-          <ChapterSection key={chapter.id} chapter={chapter} index={index} />
+        <TransitionStage webglAvailable={webglAvailable} />
+        {CHAPTERS.slice(1).map((chapter, index) => (
+          <ChapterSection key={chapter.id} chapter={chapter} index={index + 1} />
         ))}
         <Footer />
       </main>
+
     </div>
   )
 }

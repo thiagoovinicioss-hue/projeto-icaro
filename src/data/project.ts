@@ -98,13 +98,13 @@ export const project: Project = {
       title: 'Início do projeto de foguetes',
       description:
         'A inscrição no projeto de foguetes deu o pontapé: escolher o modelo, montar a base e aprender na prática o que um foguete precisa para sair do chão.',
-      dateLabel: '',
+      dateLabel: '05/03/2026',
     },
     {
       title: 'Etapa de lançamento',
       description:
         'O lançamento foi o momento de colocar à prova o que vinha do papel: ajustar o modelo, preparar a base e acompanhar a descida.',
-      dateLabel: '',
+      dateLabel: '15/05/2026',
     },
     {
       title: 'Classificação para a Jornada OBAFOG',
@@ -149,13 +149,6 @@ export const project: Project = {
         caption: 'O Ícaro, modelo de garrafa PET com cone preto e aletas claras',
         placeholder: false,
         ratio: 'portrait',
-      },
-      {
-        src: 'project/launches/lancamento-panorama.jpg',
-        alt: 'Vista do espaço de lançamento do projeto',
-        caption: 'Nosso espaço de lançamento',
-        placeholder: false,
-        ratio: 'wide',
       },
       {
         src: 'project/launches/base-de-lancamento.jpg',

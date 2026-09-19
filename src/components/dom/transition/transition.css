@@ -1,0 +1,102 @@
+.intro-transition {
+  position: relative;
+  height: calc(100svh + var(--intro-runway));
+  --intro-hero: 1;
+  --intro-next: 0;
+  --intro-blur: 16px;
+}
+.intro-transition__sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+.intro-transition__background,
+.intro-transition__hero,
+.intro-transition__next,
+.intro-transition__rocket,
+.intro-transition__liquid,
+.intro-transition__lens {
+  position: absolute;
+  inset: 0;
+}
+.intro-transition__background {
+  z-index: 0;
+  background: radial-gradient(ellipse at 65% 32%, #122337 0%, #080f1d 52%, #050a14 100%);
+}
+.intro-transition__hero { z-index: 10; opacity: var(--intro-hero); }
+.intro-transition__hero .chapter__stage { width: 100%; }
+.intro-transition__next {
+  z-index: 10;
+  opacity: var(--intro-next);
+  filter: blur(var(--intro-blur));
+  transform: scale(var(--intro-focus-scale, 1.015));
+  transform-origin: center 35%;
+  pointer-events: none;
+}
+.intro-transition__rocket { z-index: 20; pointer-events: none; }
+.intro-transition__liquid { z-index: 40; pointer-events: none; }
+.intro-transition__lens { z-index: 50; pointer-events: none; }
+.intro-transition__debug {
+  position: absolute; z-index: 60; left: 16px; bottom: 16px;
+  max-width: calc(100% - 32px); padding: 12px 16px;
+  white-space: pre-wrap; font: 11px/1.7 monospace;
+  color: #e0edee; background: #030910db; border: 1px solid #a8c7d338;
+  pointer-events: none;
+}
+/* The real section meets its inert double at the exact sticky release plane. */
+.intro-transition + #quem-somos {
+  margin-top: -100svh;
+  min-height: 100svh;
+  /* Cancel the document anchor inset: this anchor is the release plane. */
+  scroll-margin-top: calc(-1 * (var(--nav-h) + 12px));
+}
+html[data-intro-active="true"] #quem-somos { visibility: hidden; }
+#quem-somos, .intro-transition__next .chapter--crew {
+  background: radial-gradient(ellipse at 65% 32%, #122337 0%, #080f1d 52%, #050a14 100%);
+}
+#quem-somos .chapter-divider, .intro-transition__next .chapter-divider { visibility: hidden; }
+#quem-somos .reveal, .intro-transition__next .reveal,
+.intro-transition__next [data-reveal] { opacity: 1; transform: none; clip-path: none; }
+.nav { opacity: var(--intro-nav, 1); }
+html[data-intro-active="true"] .story-rail { opacity: var(--intro-nav, 1); }
+.wet-drop {
+  position: absolute;
+  overflow: hidden;
+  background: linear-gradient(130deg, #e1eff513, #ffffff02 40%, #0007100b 80%);
+  border: .7px solid #02080d33;
+  box-shadow: inset 1px 1px 2px #f1fcff40, inset -1px -1px 2px #01061038, 0 1px 2px #00000012;
+  backdrop-filter: blur(.4px) brightness(1.1);
+}
+.wet-drop::before {
+  content: ''; position: absolute; z-index: 2;
+  top: 8%; left: 9%; width: 36%; height: 38%;
+  border-radius: 60%; transform: rotate(23deg);
+  border-left: 1.4px solid #f8ffffb0;
+  border-top: .8px solid #f8ffff4a;
+  filter: blur(.35px);
+}
+.wet-drop::after {
+  content: ''; position: absolute; z-index: 2; inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 1px 1px 2px #effaff24, inset -1px -2px 3px #00040b2b;
+  background: radial-gradient(ellipse at 68% 92%, #effbff1f, transparent 30%);
+}
+.wet-drop__refraction { position: absolute; opacity: .86; }
+.wet-drop__refraction .chapter--crew { background: radial-gradient(ellipse at 65% 32%, #122337, #080f1d 52%, #050a14); }
+.wet-drop__refraction .chapter-divider { visibility: hidden; }
+.wet-drop__refraction .reveal { opacity: 1; transform: none; clip-path: none; }
+.intro-transition__lens { visibility: hidden; }
+.intro-transition__fallback {
+  background: radial-gradient(ellipse at 25% 30%, #769598, #283c49 45%, #102331 75%, #597781);
+  opacity: var(--intro-coverage, 0);
+}
+html[data-intro-covered="true"] .nav,
+html[data-intro-covered="true"] .story-rail { visibility: hidden; pointer-events: none; }
+.intro-transition[data-phase="complete"] .intro-transition__rocket,
+.intro-transition[data-phase="complete"] .intro-transition__liquid,
+.intro-transition[data-phase="complete"] .intro-transition__lens { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .intro-transition__rocket, .intro-transition__lens { display: none; }
+}

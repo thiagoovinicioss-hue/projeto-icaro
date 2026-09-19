@@ -1,8 +1,9 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, type RefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { sim, quality } from '../../../utils/sim'
+import { sim, quality, stagePin } from '../../../utils/sim'
 import { rocketAt, fillAt, channelAt, TRACKS } from '../../../story/cinema'
+import { transitionState } from '../../../story/transition/stageState'
 import { ROCKET_DIMENSIONS } from './dimensions'
 import { makeFinGeometry } from './finGeometry'
 import {
@@ -30,12 +31,23 @@ const _warmEmissive = new THREE.Color('#e2913a')
  * - bico plástico simples no pescoço; propulsão = água.
  * Geometrias sempre no mesmo espaço normalizado (y=0 na boca).
  */
-export function Rocket() {
+export function Rocket({ transitionRig, waterOrigin }: { transitionRig?: RefObject<THREE.Group>; waterOrigin?: RefObject<THREE.Group> } = {}) {
   const mats = useRocketMaterials()
-  const groupRef = useRef<THREE.Group>(null)
+  const ownGroupRef = useRef<THREE.Group>(null)
+  const groupRef = transitionRig ?? ownGroupRef
   const waterRef = useRef<THREE.Mesh>(null)
   const meniscusRef = useRef<THREE.Mesh>(null)
   const rocketSample = useRef({ position: new THREE.Vector3(), quaternion: new THREE.Quaternion() })
+  useEffect(() => {
+    if (!transitionRig) return
+    mats.pet.opacity = 0.32
+    mats.pet.color.set('#d5e1e4')
+    mats.blue.opacity = 1
+    mats.blue.depthWrite = true
+    mats.blue.color.set('#1c63bb')
+    mats.water.opacity = .46
+    mats.water.emissiveIntensity = .06
+  }, [transitionRig, mats])
 
   const bottleGeo = useMemo(makeBottleGeometry, [])
   const sleeveGeo = useMemo(makeBlueSleeveGeometry, [])
@@ -48,9 +60,14 @@ export function Rocket() {
   }, [])
 
   useFrame((state) => {
+    if (transitionRig) return
     const t = sim.smooth
     const pose = rocketAt(t, quality.reducedMotion, state.clock.elapsedTime, rocketSample.current)
+    const visible = stagePin !== null || (!transitionState.active && transitionState.storyAllowed && sim.chapterIndex > 1)
+    transitionState.storyRocketState = visible ? 'chapter' : 'hidden'
+
     if (groupRef.current) {
+      groupRef.current.visible = visible
       groupRef.current.position.copy(pose.position)
       groupRef.current.quaternion.copy(pose.quaternion)
     }
@@ -123,10 +140,8 @@ export function Rocket() {
         <cylinderGeometry args={[ROCKET_DIMENSIONS.nozzle.tipRadius, ROCKET_DIMENSIONS.nozzle.tipRadius, 0.06, 24]} />
       </mesh>
 
-      {/* Jato de água / spray abaixo do bico */}
-      <group position={[0, -0.32, 0]}>
-        <WaterJet mats={mats} />
-      </group>
+      <group ref={waterOrigin} name="waterOrigin" position={[0, -ROCKET_DIMENSIONS.nozzle.height - 0.06, 0]} />
+      {!transitionRig && <group position={[0, -0.32, 0]}><WaterJet mats={mats} /></group>}
     </group>
   )
 }

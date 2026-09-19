@@ -1,7 +1,5 @@
 import type { Chapter } from '../../../story/chapters'
 import { project } from '../../../data/project'
-import { isPlaceholder } from '../../../utils/placeholders'
-import { PlaceholderText } from '../PlaceholderText'
 import { PhotoFigure } from '../PhotoFigure'
 import { SectionHeader } from './SectionHeader'
 

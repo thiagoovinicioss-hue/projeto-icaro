@@ -3,12 +3,10 @@ import { project } from '../../../data/project'
 import { isPlaceholder } from '../../../utils/placeholders'
 import { PlaceholderText } from '../PlaceholderText'
 import { PhotoFigure } from '../PhotoFigure'
-import { Reveal } from '../Reveal'
 import { SectionHeader } from './SectionHeader'
 
 export function JourneySection({ chapter }: { chapter: Chapter }) {
-  const prep = project.photos.journey.find((p) => p.src.includes('prep')) ?? project.photos.journey[1] ?? project.photos.journey[0]
-  const gallery = project.photos.journey.filter((p) => p.src.includes('yuri'))
+  const duo = project.crew.slice(0, 2)
 
   return (
     <div className="journey-grid">
@@ -28,31 +26,19 @@ export function JourneySection({ chapter }: { chapter: Chapter }) {
           foguete não sai do chão gratuitamente.
         </p>
       </div>
-      <div className="journey-photos">
-        <Reveal variant="up" as="figure">
-          <PhotoFigure
-            src={prep.src}
-            alt={prep.alt}
-            caption={prep.caption ?? 'Preparação do lançamento'}
-            pending={prep.placeholder}
-            ratio={prep.ratio ?? 'portrait'}
-          />
-        </Reveal>
-        {gallery.length > 0 && (
-          <div className="photo-strip">
-            {gallery.map((p) => (
-              <PhotoFigure
-                key={p.src}
-                src={p.src}
-                alt={p.alt}
-                caption={p.caption}
-                pending={p.placeholder}
-                ratio={p.ratio ?? 'portrait'}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      <ul className="journey-duo">
+        {duo.map((member) => (
+          <li key={member.name} className="journey-duo__item">
+            <PhotoFigure
+              src={member.photo}
+              alt={`Foto de ${isPlaceholder(member.name) ? 'integrante da equipe' : member.name}`}
+              pending={member.placeholder}
+              ratio="portrait"
+            />
+            <span className="journey-duo__name">{member.name}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

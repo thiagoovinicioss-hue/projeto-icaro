@@ -12,7 +12,7 @@ export function MemoryCalendarSection({ chapter }: { chapter: Chapter }) {
   const [isUnfolded, setIsUnfolded] = useState(false);
   const [isFlipping, setIsFlipping] = useState(false);
   const [flipDirection, setFlipDirection] = useState<'next' | 'prev'>('next');
-  const sectionRef = useRef<HTMLSectionElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
   const paperRef = useRef<HTMLDivElement>(null);
   const hasAnimatedRef = useRef(false);

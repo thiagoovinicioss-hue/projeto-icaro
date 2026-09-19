@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react'
 import type { Chapter, ChapterKind } from '../../story/chapters'
 import { IntroSection } from './sections/IntroSection'
 import { CrewSection } from './sections/CrewSection'
-import { OriginSection } from './sections/OriginSection'
+import { MemoryCalendarSection } from './sections/MemoryCalendarSection'
 import { QualificationSection } from './sections/QualificationSection'
 import { JourneySection } from './sections/JourneySection'
 import { GoalSection } from './sections/GoalSection'
@@ -21,7 +21,7 @@ import { quality } from '../../utils/sim'
 const KIND_SECTIONS: Record<ChapterKind, ComponentType<{ chapter: Chapter }>> = {
   intro: IntroSection,
   crew: CrewSection,
-  origin: OriginSection,
+  origin: MemoryCalendarSection,
   qualification: QualificationSection,
   journey: JourneySection,
   goal: GoalSection,

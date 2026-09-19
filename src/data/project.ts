@@ -69,21 +69,21 @@ export const project: Project = {
   tagline: 'Do chão ao espaço, em conta-gotas.',
   competition: {
     shortName: 'OBAFOG',
-    fullName: TODO_REAL_CONTENT,
+    fullName: 'Olimpíada Brasileira de Foguetes',
   },
   school: {
-    name: TODO_REAL_CONTENT,
-    city: TODO_REAL_CONTENT,
+    name: '4º Colégio da Polícia Militar de Maringá',
+    city: 'Maringá',
   },
   crew: [
     {
-      name: TODO_REAL_CONTENT,
+      name: 'Thiago',
       role: 'Estudante · equipe do Projeto Ícaro',
       photo: 'project/team/pessoa-1.jpg',
       placeholder: false,
     },
     {
-      name: TODO_REAL_CONTENT,
+      name: 'Yuri',
       role: 'Estudante · equipe do Projeto Ícaro',
       photo: 'project/team/pessoa-2.jpg',
       placeholder: false,
@@ -91,28 +91,30 @@ export const project: Project = {
   ],
   originStory: [
     'O Projeto Ícaro nasceu de uma inscrição em um projeto de foguetes. Nada de grandes laboratórios: uma base, dois estudantes e a vontade de entender, na prática, como um foguete se comporta fora do papel.',
-    TODO_REAL_CONTENT,
+    'Cada etapa foi medida, ajuste e aprendizado — o tipo de coisa que não sai do papel, sai da base de lançamento.',
   ],
   timeline: [
     {
       title: 'Início do projeto de foguetes',
-      description: TODO_REAL_CONTENT,
-      dateLabel: TODO_REAL_CONTENT,
+      description:
+        'A inscrição no projeto de foguetes deu o pontapé: escolher o modelo, montar a base e aprender na prática o que um foguete precisa para sair do chão.',
+      dateLabel: '',
     },
     {
       title: 'Etapa de lançamento',
-      description: TODO_REAL_CONTENT,
-      dateLabel: TODO_REAL_CONTENT,
+      description:
+        'O lançamento foi o momento de colocar à prova o que vinha do papel: ajustar o modelo, preparar a base e acompanhar a descida.',
+      dateLabel: '',
     },
     {
       title: 'Classificação para a Jornada OBAFOG',
       description:
         'O resultado saiu e o projeto mudou de tamanho: fomos classificados para a Jornada da OBAFOG.',
-      dateLabel: TODO_REAL_CONTENT,
+      dateLabel: '19/10/2026',
     },
   ],
   qualification: {
-    dateLabel: TODO_REAL_CONTENT,
+    dateLabel: '19/10/2026',
     context:
       'A classificação veio em um lançamento em que o foguete se comportou bem dentro do que estava planejado. Vale lembrar o que isso significa em uma Jornada: projeto aprovado em uma etapa, e uma etapa nova na frente.',
     confirmed: false,
@@ -122,13 +124,13 @@ export const project: Project = {
     { label: 'Foguete da próxima etapa', note: 'valor a definir' },
   ],
   pix: {
-    beneficiary: TODO_REAL_CONTENT,
-    key: TODO_REAL_CONTENT,
+    beneficiary: '',
+    key: '44988061945',
     payload: null,
   },
   contact: {
-    email: TODO_REAL_CONTENT,
-    instagram: TODO_REAL_CONTENT,
+    email: '',
+    instagram: '',
   },
   photos: {
     team: [

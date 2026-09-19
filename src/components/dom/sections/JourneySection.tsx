@@ -8,6 +8,7 @@ import { SectionHeader } from './SectionHeader'
 
 export function JourneySection({ chapter }: { chapter: Chapter }) {
   const prep = project.photos.journey.find((p) => p.src.includes('prep')) ?? project.photos.journey[1] ?? project.photos.journey[0]
+  const gallery = project.photos.journey.filter((p) => p.src.includes('yuri'))
 
   return (
     <div className="journey-grid">
@@ -27,15 +28,31 @@ export function JourneySection({ chapter }: { chapter: Chapter }) {
           foguete não sai do chão gratuitamente.
         </p>
       </div>
-      <Reveal variant="up" as="figure">
-        <PhotoFigure
-          src={prep.src}
-          alt={prep.alt}
-          caption={prep.caption ?? 'Preparação do lançamento'}
-          pending={prep.placeholder}
-          ratio={prep.ratio ?? 'portrait'}
-        />
-      </Reveal>
+      <div className="journey-photos">
+        <Reveal variant="up" as="figure">
+          <PhotoFigure
+            src={prep.src}
+            alt={prep.alt}
+            caption={prep.caption ?? 'Preparação do lançamento'}
+            pending={prep.placeholder}
+            ratio={prep.ratio ?? 'portrait'}
+          />
+        </Reveal>
+        {gallery.length > 0 && (
+          <div className="photo-strip">
+            {gallery.map((p) => (
+              <PhotoFigure
+                key={p.src}
+                src={p.src}
+                alt={p.alt}
+                caption={p.caption}
+                pending={p.placeholder}
+                ratio={p.ratio ?? 'portrait'}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

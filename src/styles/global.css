@@ -1074,6 +1074,17 @@ code {
   border: 0;
 }
 
+.photo-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+
+.journey-photos {
+  display: grid;
+  gap: var(--sp-5);
+}
+
 /* ---------------------------------- journey */
 
 .journey-grid {

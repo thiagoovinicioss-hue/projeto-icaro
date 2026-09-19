@@ -11,6 +11,7 @@ import { MotionTitle } from '../motion/MotionTitle'
 function LaunchPhoto() {
   const photos = project.photos.launches
   const wide = photos.find((p) => p.ratio === 'wide') ?? photos[0]
+  const rest = photos.filter((p) => p !== wide)
 
   if (photos.length === 0) {
     return (
@@ -19,14 +20,31 @@ function LaunchPhoto() {
   }
 
   return (
-    <PhotoFigure
-      src={wide.src}
-      alt={wide.alt}
-      caption={wide.caption}
-      pending={wide.placeholder}
-      ratio="wide"
-      reveal="clip"
-    />
+    <>
+      <PhotoFigure
+        src={wide.src}
+        alt={wide.alt}
+        caption={wide.caption}
+        pending={wide.placeholder}
+        ratio="wide"
+        reveal="clip"
+      />
+      {rest.length > 0 && (
+        <div className="photo-strip">
+          {rest.map((p) => (
+            <PhotoFigure
+              key={p.src}
+              src={p.src}
+              alt={p.alt}
+              caption={p.caption}
+              pending={p.placeholder}
+              ratio={p.ratio ?? 'portrait'}
+              reveal="clip"
+            />
+          ))}
+        </div>
+      )}
+    </>
   )
 }
 

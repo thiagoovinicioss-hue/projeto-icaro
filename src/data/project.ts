@@ -157,6 +157,13 @@ export const project: Project = {
         placeholder: false,
         ratio: 'wide',
       },
+      {
+        src: 'project/launches/base-de-lancamento.jpg',
+        alt: 'Base de lançamento do Projeto Ícaro',
+        caption: 'A base de lançamento do Projeto Ícaro',
+        placeholder: false,
+        ratio: 'portrait',
+      },
     ],
     journey: [
       {
@@ -181,6 +188,27 @@ export const project: Project = {
       {
         src: 'project/journey/jornada-prep-b.jpg',
         alt: 'Preparação do lançamento',
+        placeholder: false,
+        ratio: 'portrait',
+      },
+      {
+        src: 'project/journey/yuri-na-base.jpg',
+        alt: 'Yuri com a base de lançamento do Projeto Ícaro',
+        caption: 'Yuri com a base de lançamento',
+        placeholder: false,
+        ratio: 'portrait',
+      },
+      {
+        src: 'project/journey/yuri-com-foguete.jpg',
+        alt: 'Yuri com o foguete do Projeto Ícaro',
+        caption: 'Yuri com o foguete',
+        placeholder: false,
+        ratio: 'portrait',
+      },
+      {
+        src: 'project/journey/yuri-com-foguete-b.jpg',
+        alt: 'Yuri com o foguete do Projeto Ícaro',
+        caption: 'Yuri com o foguete',
         placeholder: false,
         ratio: 'portrait',
       },

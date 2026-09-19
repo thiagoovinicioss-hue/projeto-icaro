@@ -1,7 +1,8 @@
-import { readdir, mkdir } from 'node:fs/promises'
+import { readdir, mkdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
+import heicConvert from 'heic-convert'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -30,20 +31,37 @@ const plan = [
   { match: '16.29.02', dir: outDirs.journey, out: 'jornada-retrato.jpg', width: 900 },
   { match: '16.28.59', dir: outDirs.journey, out: 'jornada-prep-a.jpg', width: 900 },
   { match: '16.29.00', dir: outDirs.journey, out: 'jornada-prep-b.jpg', width: 900 },
+  { match: 'IMG_1808', dir: outDirs.launches, out: 'base-de-lancamento.jpg', width: 1080 },
+  { match: 'IMG_1848', dir: outDirs.journey, out: 'yuri-na-base.jpg', width: 900 },
+  { match: 'IMG_1852', dir: outDirs.journey, out: 'yuri-com-foguete.jpg', width: 900 },
+  { match: 'IMG_1854', dir: outDirs.journey, out: 'yuri-com-foguete-b.jpg', width: 900 },
 ]
 
 const files = await readdir(srcDir)
 
+async function decodeToJpegBuffer(src, extension) {
+  if (extension === 'heic' || extension === 'HEIC') {
+    const buf = await readFile(src)
+    const out = await heicConvert({ buffer: buf, format: 'JPEG', quality: 92 })
+    return { buffer: out, ext: 'jpeg' }
+  }
+  return { buffer: await readFile(src), ext: extension }
+}
+
 async function findSrc(match) {
-  const name = files.find((f) => f.includes(match) && f.endsWith('.jpeg'))
+  const name = files.find(
+    (f) => f.includes(match) && (f.endsWith('.jpeg') || f.endsWith('.jpg') || f.endsWith('.heic') || f.endsWith('.HEIC')),
+  )
   if (!name) throw new Error(`Arquivo com "${match}" não encontrado em ${srcDir}`)
   return path.join(srcDir, name)
 }
 
 for (const item of plan) {
   const src = await findSrc(item.match)
+  const ext = path.extname(src).slice(1)
+  const { buffer } = await decodeToJpegBuffer(src, ext)
   const out = path.join(item.dir, item.out)
-  await sharp(src)
+  await sharp(buffer)
     .rotate()
     .resize({ width: item.width, withoutEnlargement: true })
     .jpeg({ quality: 78, mozjpeg: true })

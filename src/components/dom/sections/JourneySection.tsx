@@ -29,13 +29,14 @@ export function JourneySection({ chapter }: { chapter: Chapter }) {
           foguete não sai do chão gratuitamente.
         </p>
       </div>
-      <ul className="journey-duo">
+      <ul className="journey-duo journey-duo--large">
         {duo.map((member) => (
           <li key={member.name} className="journey-duo__item">
             <PhotoFigure
               src={member.photo}
               alt={`Foto de ${member.name}`}
               ratio="portrait"
+              className="journey-duo__photo"
             />
             <span className="journey-duo__name">{member.name}</span>
           </li>

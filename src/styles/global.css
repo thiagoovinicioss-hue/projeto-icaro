@@ -59,6 +59,7 @@
   /* z-index scale */
   --z-scene: 0;
   --z-content: 1;
+  --z-transition: 40;
   --z-nav: 50;
   --z-overlay: 60;
 
@@ -859,6 +860,15 @@ code {
   max-width: 680px;
 }
 
+.crew-grid--single {
+  justify-items: center;
+}
+
+.crew-grid--single .crew-card {
+  max-width: 320px;
+  width: 100%;
+}
+
 .crew-card {
   margin: 0;
   display: flex;
@@ -1078,6 +1088,8 @@ code {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--sp-4);
+  max-width: 720px;
+  margin-inline: auto;
 }
 
 .journey-photos {
@@ -1093,6 +1105,14 @@ code {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--sp-4);
   align-items: start;
+}
+
+.journey-duo--large .journey-duo__photo .photo-frame {
+  aspect-ratio: 3 / 4;
+}
+
+.journey-duo--large .journey-duo__photo .photo-frame img {
+  object-position: center 25%;
 }
 
 .journey-duo__item {
@@ -1746,18 +1766,6 @@ code {
 .chapter-divider.is-reduced .chapter-divider__node {
   transform: none;
   opacity: 0.7;
-}
-
-/* ---------------------------------- hero exit
-   A saída do herói é uma máscara que "fecha" o bloco de cima enquanto a
-   história chega — o texto anterior sai por clipping, não some solto. */
-
-.hero-copy--exit {
-  --rv: 1;
-  --rvs: 1;
-  opacity: calc(0.3 + 0.7 * var(--rvs));
-  clip-path: inset(0 0 calc((1 - var(--rvs)) * 34%) 0);
-  will-change: clip-path, opacity;
 }
 
 /* ---------------------------------- progress mission entry

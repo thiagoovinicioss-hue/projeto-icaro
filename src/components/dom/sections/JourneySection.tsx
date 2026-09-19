@@ -6,7 +6,10 @@ import { PhotoFigure } from '../PhotoFigure'
 import { SectionHeader } from './SectionHeader'
 
 export function JourneySection({ chapter }: { chapter: Chapter }) {
-  const duo = project.crew.slice(0, 2)
+  const duo = [
+    { name: 'Thiago', photo: 'project/journey/jornada-prep-b.jpg' },
+    { name: 'Yuri', photo: 'project/journey/yuri-com-foguete.jpg' },
+  ]
 
   return (
     <div className="journey-grid">
@@ -31,8 +34,7 @@ export function JourneySection({ chapter }: { chapter: Chapter }) {
           <li key={member.name} className="journey-duo__item">
             <PhotoFigure
               src={member.photo}
-              alt={`Foto de ${isPlaceholder(member.name) ? 'integrante da equipe' : member.name}`}
-              pending={member.placeholder}
+              alt={`Foto de ${member.name}`}
               ratio="portrait"
             />
             <span className="journey-duo__name">{member.name}</span>

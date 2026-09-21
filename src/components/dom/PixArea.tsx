@@ -25,7 +25,7 @@ export function PixArea() {
               <div className="pix-key__actions">
                 <CopyPixButton
                   label="COPIAR CHAVE PIX"
-                  doneLabel="Chave Pix copiada."
+                  doneLabel="Chave copiada."
                   value={pixCopyValue(pix.payload, pix.key)}
                 />
                 <ShareButton label="COMPARTILHAR" />

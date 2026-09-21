@@ -7,7 +7,7 @@ export function ProgressSection({ chapter }: { chapter: Chapter }) {
     <div className="chapter-copy chapter-copy--center">
       <SectionHeader chapter={chapter} />
       <p className="chapter-body chapter-body--center">
-        O número abaixo sobe apenas com doações reais. Zero centavo até sair do papel.
+        O número abaixo sobe apenas com doações reais — cada centavo confirmado entra aqui.
       </p>
       <ProgressBar />
     </div>

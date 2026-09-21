@@ -12,6 +12,6 @@ export const campaignDefaults = Object.freeze({
 
 export const campaign: Campaign = {
   goalCents: campaignDefaults.goalCents,
-  raisedCents: campaignDefaults.raisedCents,
-  lastUpdated: campaignDefaults.lastUpdated,
+  raisedCents: 40000,
+  lastUpdated: '2026-09-20',
 }

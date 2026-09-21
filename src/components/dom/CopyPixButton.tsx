@@ -25,7 +25,7 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
-export function CopyPixButton({ label, value, doneLabel }: { label: string; value: string; doneLabel: string }) {
+export function CopyPixButton({ label, value, doneLabel, feedbackMs = 1800 }: { label: string; value: string; doneLabel: string; feedbackMs?: number }) {
   const [copied, setCopied] = useState(false)
   const timer = useRef<number | null>(null)
 
@@ -40,7 +40,7 @@ export function CopyPixButton({ label, value, doneLabel }: { label: string; valu
     if (ok) {
       setCopied(true)
       if (timer.current) window.clearTimeout(timer.current)
-      timer.current = window.setTimeout(() => setCopied(false), 2600)
+      timer.current = window.setTimeout(() => setCopied(false), feedbackMs)
     }
   }
 

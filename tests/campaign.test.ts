@@ -8,9 +8,9 @@ describe('campaign', () => {
     expect(Object.isFrozen(campaignDefaults)).toBe(true)
   })
 
-  it('starts at R$ 0 with no recorded date', () => {
-    expect(campaign.raisedCents).toBe(0)
-    expect(campaign.lastUpdated).toBeNull()
+  it('tracks R$ 400 raised (40.000 centavos) with an update date', () => {
+    expect(campaign.raisedCents).toBe(40000)
+    expect(campaign.lastUpdated).toBe('2026-09-20')
   })
 
   it('raise never goes negative', () => {

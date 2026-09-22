@@ -28,6 +28,7 @@ import {
   makeCrtBackTexture,
   makeGraphiteTexture,
   makeObafogStickerTexture,
+  makePostItTexture,
   makePrinterPlasticTexture,
 } from './officeTextures'
 
@@ -265,6 +266,82 @@ function extrudeFrame(o: FrameOpts): THREE.BufferGeometry {
   return geo
 }
 
+/* ---------------------------------- post-it ---------------------------------- */
+
+/** Dimensões do post-it colado na moldura superior do CRT. */
+const POSTIT_W = 0.118
+const POSTIT_H = 0.112
+/** Posição na face frontal: canto superior, entre a tela e o painel. */
+const POSTIT_POS: [number, number, number] = [0.055, 0.5865, 0]
+
+/**
+ * Folha de post-it com espessura real (extrusão de retângulo arredondado),
+ * UVs do cap mapeadas 0..1 e curl sutil: os cantos inferiores se descolam da
+ * moldura (papel autoadesivo com faixa fixa no topo). O deslocamento é
+ * aplicado a TODOS os vértices (capas + laterais) — a folha inteira dobra.
+ */
+function makePostItGeometry(w: number, h: number): THREE.BufferGeometry {
+  const depth = 0.0016
+  const shape = new THREE.Shape()
+  roundedRectPath(shape, 0, 0, w, h, 0.007)
+  const geo = new THREE.ExtrudeGeometry(shape, {
+    depth,
+    bevelEnabled: false,
+    curveSegments: 6,
+  })
+  geo.translate(0, 0, -depth / 2)
+
+  const pos = geo.attributes.position as THREE.BufferAttribute
+  const uv = geo.attributes.uv as THREE.BufferAttribute
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i)
+    const y = pos.getY(i)
+    uv.setXY(i, x / w + 0.5, y / h + 0.5)
+    const nx = x / (w / 2)
+    const tB = Math.max(0, -(y / (h / 2))) // 0 no topo (adesivo) → 1 na base
+    const corner = Math.pow(Math.abs(nx), 1.7)
+    const curl = tB * tB * (0.0032 + 0.0062 * corner)
+    const bow = 0.0011 * Math.cos(nx * 1.15) * (1 - tB * 0.55)
+    pos.setZ(i, pos.getZ(i) + curl + bow)
+  }
+  uv.needsUpdate = true
+  pos.needsUpdate = true
+  geo.computeVertexNormals()
+  return geo
+}
+
+/** Sombra de contato suave do post-it sobre a moldura (cache estático). */
+let _postItShadowTex: THREE.CanvasTexture | null = null
+function makePostItContactShadow(): THREE.CanvasTexture {
+  if (_postItShadowTex) return _postItShadowTex
+  const s = 128
+  const c = document.createElement('canvas')
+  c.width = s
+  c.height = s
+  const ctx = c.getContext('2d')!
+  ctx.clearRect(0, 0, s, s)
+  if ('filter' in ctx) ctx.filter = 'blur(9px)'
+  ctx.fillStyle = 'rgba(8, 5, 2, 0.62)'
+  const m = 26
+  const r = 14
+  ctx.beginPath()
+  ctx.moveTo(m + r, m)
+  ctx.lineTo(s - m - r, m)
+  ctx.quadraticCurveTo(s - m, m, s - m, m + r)
+  ctx.lineTo(s - m, s - m - r)
+  ctx.quadraticCurveTo(s - m, s - m, s - m - r, s - m)
+  ctx.lineTo(m + r, s - m)
+  ctx.quadraticCurveTo(m, s - m, m, s - m - r)
+  ctx.lineTo(m, m + r)
+  ctx.quadraticCurveTo(m, m, m + r, m)
+  ctx.closePath()
+  ctx.fill()
+  if ('filter' in ctx) ctx.filter = 'none'
+  const tex = new THREE.CanvasTexture(c)
+  _postItShadowTex = tex
+  return tex
+}
+
 /* ------------------------------------------------------------- monitor */
 
 export function CrtMonitor() {
@@ -450,6 +527,26 @@ export function CrtMonitor() {
         polygonOffsetUnits: -1,
       }),
     [stickerTex],
+  )
+  /* post-it de campanha: papel fosco + lateral na cor da folha */
+  const postItTex = useMemo(() => makePostItTexture(), [])
+  const postItGeo = useMemo(() => makePostItGeometry(POSTIT_W, POSTIT_H), [])
+  const postItMats = useMemo(
+    () => [
+      new THREE.MeshStandardMaterial({ map: postItTex, roughness: 0.94, metalness: 0 }),
+      new THREE.MeshStandardMaterial({ color: '#e4c43c', roughness: 0.96, metalness: 0 }),
+    ],
+    [postItTex],
+  )
+  const postItShadowMat = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        map: makePostItContactShadow(),
+        transparent: true,
+        depthWrite: false,
+        opacity: 0.55,
+      }),
+    [],
   )
   const ringMat = useMemo(
     () =>
@@ -763,6 +860,21 @@ export function CrtMonitor() {
       <mesh position={[-0.325, shellBottom + 0.046, zFace + 0.008]} material={stickerMat}>
         <planeGeometry args={[0.15, 0.075]} />
       </mesh>
+
+      {/* ===== post-it de campanha (canto superior da moldura) ===== */}
+      {/* sombra de contato apoiada na moldura, deslocada pela luz de frente */}
+      <mesh
+        position={[0.059, 0.579, zFace + 0.0075]}
+        rotation={[0, 0, -0.05]}
+        scale={[1.26, 1.34, 1]}
+        material={postItShadowMat}
+      >
+        <planeGeometry args={[POSTIT_W, POSTIT_H]} />
+      </mesh>
+      {/* folha: leve rotação manual, espessura real, cantos descolando */}
+      <group position={[POSTIT_POS[0], POSTIT_POS[1], zFace + 0.0115]} rotation={[0, -0.035, -0.055]}>
+        <mesh geometry={postItGeo} material={postItMats} castShadow />
+      </group>
 
       {/* ===== base/plinto que fecha a carcaça até os pés ===== */}
       <RoundedBox

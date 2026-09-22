@@ -16,12 +16,9 @@ import { CRT_H, CRT_W, doCopy, doShare, exitComputerMode, office } from './offic
 import { getCrtButtons } from './crtUi'
 import {
   Desk,
-  DriveProps,
   Floor,
-  FloppyDisk,
   Keyboard,
   OfficeLamp,
-  PaperPad,
   Pen,
   PhysicalMouse,
   Poster,
@@ -45,8 +42,10 @@ function GarbageCollector() {
 /**
  * Escritório retrô — a experiência 3D opcional da seção de apoio (§2).
  *
- * Câmera sentada (olhar humano levemente para baixo, borda da mesa no rodapé)
- * com micro-parallax; luz quente da luminária como chave. As interações são:
+ * Composição da mesa em 3 zonas funcionais: ESQUERDA impressora + QR, CENTRO
+ * teclado/mouse, DIREITA TV CRT. Câmera sentada (olhar humano levemente para
+ * baixo, borda da mesa no rodapé) com micro-parallax; luz quente da luminária
+ * como chave. As interações são:
  *   1) clicar no MOUSE FÍSICO → modo computador (cursor virtual no CRT)
  *   2) movimentar o ponteiro no modo computador → mapeia para o CRT
  *   3) clicar em COPIAR/COMPARTILHAR dentro do CRT → ação real
@@ -99,6 +98,14 @@ function CameraRig() {
   const counts = useRef({ frames: 0, lastT: performance.now() })
 
   useFrame((state) => {
+    // [TEMP lampShot] enquadramento estático da luminária para QA visual
+    if (typeof URLSearchParams !== 'undefined' && new URLSearchParams(location.search).has('lampShot')) {
+      camera.position.set(-0.6, 0.42, 0.2)
+      camera.fov = 30
+      camera.lookAt(-0.13, 0.14, -0.55)
+      camera.updateProjectionMatrix()
+      return
+    }
     const mobile = quality.isMobile
     const pos = mobile ? CAM_MOBILE : CAM_SEATED
     const look = mobile ? CAM_MOBILE_TARGET : CAM_TARGET
@@ -141,7 +148,7 @@ type OfficeControlsProps = {
 }
 
 function OfficeControls({ onCursor }: OfficeControlsProps) {
-  const { gl, camera } = useThree()
+  const { gl, camera, scene } = useThree()
   const raycaster = useMemo(() => new THREE.Raycaster(), [])
   const ndc = useMemo(() => new THREE.Vector2(), [])
 
@@ -212,7 +219,10 @@ function OfficeControls({ onCursor }: OfficeControlsProps) {
       }
     }
 
-    if (office.debug) (window as unknown as { __officeCam?: THREE.Camera }).__officeCam = camera
+    if (office.debug) {
+      ;(window as unknown as { __officeCam?: THREE.Camera }).__officeCam = camera
+      ;(window as unknown as { __officeScene?: THREE.Object3D }).__officeScene = scene
+    }
 
     el.addEventListener('pointerdown', onPointerDown)
     el.addEventListener('pointerup', onPointerUp)
@@ -274,6 +284,8 @@ export function OfficeScene({ reduced }: Props) {
   const shadows = quality.shadows && quality.deviceTier !== 'mobile'
   const params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(location.search) : null
   const debug = params?.get('debugOffice') === '1' || params?.get('debugPaper') === '1'
+  // [TEMP lampTest] modo de QA isolado: só a luminária sobre palco neutro
+  const lampTest = params?.get('lampTest') === '1'
 
   return (
     <>
@@ -302,36 +314,46 @@ export function OfficeScene({ reduced }: Props) {
           }}
         />
 
-        {/* luz quente da luminária; fill muito fraco; glow do CRT (§18) */}
-        <ambientLight intensity={0.16} color="#ffe4c2" />
-        <hemisphereLight args={['#ffd9b0', '#140d08', 0.42]} />
-        <directionalLight position={[3.2, 5.5, 2.5]} intensity={0.28} color="#ffce8a" />
+        {/* luz quente da luminária é a key; ambiance baixa p/ o foco do pool (§18) */}
+        <ambientLight intensity={0.13} color="#ffe4c2" />
+        <hemisphereLight args={['#ffd9b0', '#140d08', 0.38]} />
+        <directionalLight position={[3.2, 5.5, 2.5]} intensity={0.26} color="#ffce8a" />
         {/* luz frontal quente tipo softbox: revela a cara do monitor e o mouse (§18) */}
-        <directionalLight position={[2.6, 3.6, 3.2]} intensity={0.55} color="#ffe4bd" />
+        <directionalLight position={[2.6, 3.6, 3.2]} intensity={0.58} color="#ffe4bd" />
         {/* back-light frio: recorta a silhueta da carcaça contra a parede (§18) */}
-        <directionalLight position={[-3.2, 2.4, -2]} intensity={0.16} color="#7a6b58" />
+        <directionalLight position={[-3.2, 2.4, -2]} intensity={0.17} color="#7a6b58" />
         {/* fill quente da esquerda-frente: revela a impressora e o papel na mesa (§18) */}
-        <directionalLight position={[-2.6, 3.4, 4.2]} intensity={0.15} color="#ffd1a0" />
+        <directionalLight position={[-2.6, 3.4, 4.2]} intensity={0.22} color="#ffd1a0" />
         {/* brilho frio e sutil do fósforo do monitor sobre a mesa */}
         <CrtGlow />
 
-        <Wall />
-        <Poster />
-        <Floor />
-        <Desk />
-        <OfficeLamp shadows={shadows} />
-        <Keyboard />
-        <PhysicalMouse />
-        <Printer />
-        <CrtMonitor />
-        <PaperPad />
-        <Pen />
-        <FloppyDisk />
-        <DriveProps />
-        <CalloutLayer />
-        <GarbageCollector />
-      </Canvas>
+        {lampTest ? (
+          /* [TEMP] palco isolado da luminária: fundo escuro + piso neutro */
+          <>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.065, -0.05]} receiveShadow>
+              <planeGeometry args={[3, 3]} />
+              <meshStandardMaterial color="#262019" roughness={0.92} />
+            </mesh>
+            <OfficeLamp shadows={shadows} />
+          </>
+        ) : (
+          <>
+            <Wall />
+            <Poster />
+            <Floor />
+            <Desk />
+            <OfficeLamp shadows={shadows} />
+            <Keyboard />
+            <PhysicalMouse />
+            <Printer />
+            <CrtMonitor />
+            <Pen />
+            <CalloutLayer />
+            <GarbageCollector />
+          </>
+        )}
 
+      </Canvas>
       {debug ? <DebugOverlay /> : null}
     </>
   )

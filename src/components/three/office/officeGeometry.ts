@@ -20,8 +20,9 @@ export const WALL_Z = -1.05
 /* console/monitor (direita) — TV CRT de mesa ~14", carcaça creme volumosa,
    traseira afunilada de tubo, face frontal com moldura escura e painel de
    controles analógicos à direita. A face frontal fica em CRT_POS.z +
-   CRT_SHELL_D/2 e o tampo em deskTopY. */
-export const CRT_POS: [number, number, number] = [0.52, 0, -0.4]
+   CRT_SHELL_D/2 e o tampo em deskTopY. Borda direita ≈ x+0.84; o CRT é o
+   elemento dominante da composição, ancorado na ZONA DIREITA da mesa. */
+export const CRT_POS: [number, number, number] = [0.44, 0, -0.42]
 /** largura total da carcaça (creme). */
 export const CRT_SHELL_W = 0.8
 /** altura total da carcaça (creme), sem pés. */
@@ -59,8 +60,11 @@ export const CRT_BEZEL_H = CRT_SHELL_H
 export const CRT_BEZEL_D = CRT_SHELL_D
 
 /* impressora (esquerda) — laser compacta dos anos 2000, base no tampo.
-   W:H:D ≈ 1:0.55:0.70, menor que o CRT; leve rotação contra a parede (§24/§25) */
-export const PRINT_POS: [number, number, number] = [-0.42, 0, -0.32]
+   W:H:D ≈ 1:0.55:0.70, menor que o CRT; leve rotação contra a parede (§24/§25).
+   Ancorada na ZONA ESQUERDA, recuada do enquadramento e VISIVELMENTE separada
+   da TV (folga de ~0.3m entre a borda direita da impressora e a esquerda do CRT)
+   — nunca colada na frente do quadro. */
+export const PRINT_POS: [number, number, number] = [-0.62, 0, -0.46]
 export const PRINT_W = 0.36
 export const PRINT_H = 0.198
 export const PRINT_D = 0.25
@@ -86,26 +90,39 @@ export const PAPER_PARK_Z = 0.32
 export const PAPER_PARK_PITCH = 0.06
 export const PAPER_PARK_ROLL = 0.005
 
-/* teclado e mouse — descansando SOBRE o tampo (bases alinhadas à mesa), logo
-   os Y aqui refletem DESK_TOP_Y. O mouse também usa office.deskTopY. */
-export const KB_POS: [number, number, number] = [-0.3, DESK_TOP_Y + 0.026, 0.26]
-/* mouse ao lado direito do teclado, na frente da mesa e no pool da luminária */
-export const MB_POS: [number, number, number] = [0.05, DESK_TOP_Y, 0.34]
+/* teclado retrô (46cm) e mouse — descansando SOBRE o tampo (bases alinhadas
+   à mesa). ZONA CENTRAL: teclado com o centro no eixo da estação, recuado em
+   direção à TV (z 0.28 — mais perto do terminal, frees space na frente); o
+   mouse repousa IMEDIATAMENTE à direita do teclado, na MESMA profundidade
+   (borda direita da carcaça ≈ x+0.32, borda esquerda do mouse ≈ x+0.34 → a
+   estação lê como UMA peça, não mouse "jogado" à direita). */
+export const KB_POS: [number, number, number] = [0.08, DESK_TOP_Y, 0.28]
+export const KB_YAW = 0.06
+export const KB_SCALE = 1.012
+/* mouse ao lado direito do teclado, alinhado ao mesmo plano de uso */
+export const MB_POS: [number, number, number] = [0.385, DESK_TOP_Y, 0.325]
 
-/* luminária (centro-fundo) — base apoiada no tampo */
-export const LAMP_POS: [number, number, number] = [-0.16, DESK_TOP_Y, -0.56]
+/* luminária (esquerda-centro-fundo, entre impressora e TV) — base apoiada no
+   tampo, recuada e levemente à esquerda para não brigar com a TV: sua cabeça
+   projeta-se no vão entre o pôster e o CRT e clareia o pool da bancada. */
+export const LAMP_POS: [number, number, number] = [-0.26, DESK_TOP_Y, -0.62]
+export const LAMP_YAW = 0.12
 
-/* pequenos objetos de mesa (estações fictícias, §16) — superfície apoiada no tampo */
-export const PAD_POS: [number, number, number] = [-0.46, DESK_TOP_Y - 0.004, 0.3]
-export const PEN_POS: [number, number, number] = [-0.46, DESK_TOP_Y + 0.007, 0.34]
-export const FLOPPY_POS: [number, number, number] = [0.95, DESK_TOP_Y + 0.0025, 0.06]
-export const POSTER_POS: [number, number, number] = [-0.86, 1.02, WALL_Z + 0.02]
+/* pequenos objetos de mesa (set dressing curado, §16) — na ZONA ESQUERDA:
+   UM único objeto de apoio (a caneta), sem invadir o repouso do papel impresso
+   (z≈-0.14, em torno de x -0.6..-0.5) nem as bordas do quadro. MENOS é mais. */
+export const PEN_POS: [number, number, number] = [-0.84, DESK_TOP_Y + 0.006, -0.26]
+
+/* pôster principal da parede — o segundo ponto focal fixo (depois do CRT) */
+export const POSTER_POS: [number, number, number] = [-0.54, 0.4, WALL_Z + 0.03]
+export const POSTER_W = 0.4
+export const POSTER_H = 0.54
 
 /* lente humana — ~45mm equivalente, pessoa sentada, borda da mesa no
    canto inferior da viewport (§14/§15). Ponto de vista levemente mais alto
    para que a face e o topo do CRT entrem no quadro sem distorção. */
-export const CAM_SEATED: [number, number, number] = [0.02, 0.66, 1.18]
-export const CAM_TARGET: [number, number, number] = [0.08, 0.1, -0.3]
+export const CAM_SEATED: [number, number, number] = [0.02, 0.73, 1.26]
+export const CAM_TARGET: [number, number, number] = [0.08, 0.13, -0.3]
 export const CAM_MOBILE: [number, number, number] = [0.06, 0.6, 1.5]
 export const CAM_MOBILE_TARGET: [number, number, number] = [0.3, 0.1, -0.25]
 export const CAM_FOV = 42

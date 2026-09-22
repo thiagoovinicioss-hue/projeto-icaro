@@ -89,11 +89,33 @@ export function makeDeskWoodTexture(face: WoodFace = 'top'): THREE.CanvasTexture
     ctx.fillRect(x, y, 1.6, 1.4)
   }
 
-  // acabamento semi-fosco: brilho suave vindo do canto superior (luminária)
+  if (face === 'top') {
+    // juntas de tábuas sutis ao longo do tampo: o tampo lê como 3 ripas de
+    // compensado envelhecido, não uma superfície única (§61)
+    for (let i = 0; i < 7; i++) {
+      const x = seeded(i + 900) * w
+      ctx.strokeStyle = 'rgba(30, 18, 6, 0.4)'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(x, 0)
+      ctx.bezierCurveTo(x + 6, h * 0.4, x - 6, h * 0.7, x + 3, h)
+      ctx.stroke()
+      ctx.strokeStyle = 'rgba(200, 150, 92, 0.18)'
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.moveTo(x + 3, 0)
+      ctx.bezierCurveTo(x + 9, h * 0.4, x - 3, h * 0.7, x + 6, h)
+      ctx.stroke()
+    }
+  }
+
+  // acabamento semi-fosco: ponto quente da luz no centro do tampo (entre a
+  // luminária e o teclado), escurecendo levemente nas bordas do quadro
   const sheen = ctx.createLinearGradient(0, 0, 0, h)
-  sheen.addColorStop(0, 'rgba(255, 214, 160, 0.075)')
-  sheen.addColorStop(0.35, 'rgba(255, 214, 160, 0.02)')
-  sheen.addColorStop(1, 'rgba(0, 0, 0, 0.28)')
+  sheen.addColorStop(0, 'rgba(0, 0, 0, 0.24)')
+  sheen.addColorStop(0.42, 'rgba(255, 214, 160, 0.09)')
+  sheen.addColorStop(0.62, 'rgba(255, 214, 160, 0.13)')
+  sheen.addColorStop(1, 'rgba(0, 0, 0, 0.3)')
   ctx.fillStyle = sheen
   ctx.fillRect(0, 0, w, h)
 
@@ -846,67 +868,154 @@ export function makePadTexture(): THREE.CanvasTexture {
 
 /* ------------------------------- post-it amarelo ------------------------------- */
 
+/**
+ * Post-it de campanha colado na moldura do CRT. Papel amarelo clássico (não
+ * neon), faixa adesiva no topo, grão de papel e aviso escrito à mão (Kalam)
+ * com "R$25,00 ou mais" em destaque — caneta azul-escura, passe duplo de
+ * tinta e sublinhado manual.
+ */
 export function makePostItTexture(): THREE.CanvasTexture {
-  const w = 256
-  const h = 256
+  const w = 512
+  const h = 512
   const canvas = document.createElement('canvas')
   canvas.width = w
   canvas.height = h
   const ctx = canvas.getContext('2d')!
-  // papel de post-it (o amarelo característico)
-  const g = ctx.createLinearGradient(0, 0, w, h)
-  g.addColorStop(0, '#ffe45c')
-  g.addColorStop(0.55, '#ffd93b')
-  g.addColorStop(1, '#f4c01e')
+
+  // papel de post-it — amarelo quente, clássico
+  const g = ctx.createLinearGradient(0, 0, w * 0.25, h)
+  g.addColorStop(0, '#ffe97c')
+  g.addColorStop(0.42, '#ffdf52')
+  g.addColorStop(0.78, '#f9d744')
+  g.addColorStop(1, '#efc934')
   ctx.fillStyle = g
   ctx.fillRect(0, 0, w, h)
-  // leve dobra no canto (canto inferior direito dobrando)
-  ctx.fillStyle = 'rgba(200, 150, 20, 0.35)'
-  const fold = 38
-  ctx.beginPath()
-  ctx.moveTo(w - fold, h)
-  ctx.lineTo(w, h)
-  ctx.lineTo(w, h - fold)
-  ctx.closePath()
-  ctx.fill()
-  // sombra fina de papel sobre o próprio post-it
-  ctx.strokeStyle = 'rgba(140, 100, 20, 0.4)'
+
+  // faixa adesiva superior (mais pálida, sem brilho) + sulco logo abaixo
+  const strip = Math.round(h * 0.12)
+  ctx.fillStyle = 'rgba(255, 252, 226, 0.20)'
+  ctx.fillRect(0, 0, w, strip)
+  ctx.fillStyle = 'rgba(150, 112, 18, 0.10)'
+  ctx.fillRect(0, strip, w, 3)
+  // fibras discretas da faixa adesiva
+  ctx.strokeStyle = 'rgba(255, 255, 240, 0.14)'
   ctx.lineWidth = 1
-  ctx.strokeRect(1, 1, w - 2, h - 2)
-  // grão
-  for (let i = 0; i < 300; i++) {
-    ctx.fillStyle = `rgba(90, 60, 0, ${0.02 + seeded(i) * 0.04})`
-    ctx.fillRect(seeded(i + 8) * w, seeded(i + 9) * h, 1.2, 1.2)
+  for (let i = 0; i < 26; i++) {
+    const y = 4 + seeded(i + 40) * (strip - 8)
+    ctx.beginPath()
+    ctx.moveTo(seeded(i + 60) * w * 0.4, y)
+    ctx.lineTo(w - seeded(i + 80) * w * 0.4, y + (seeded(i + 90) - 0.5) * 3)
+    ctx.stroke()
   }
-  // texto à mão — caneta escura, leve inclinação, várias linhas
+
+  // cantos: leve desprendimento/sombra de uso (o vinco real é na geometria)
+  const corner = ctx.createRadialGradient(w - 8, h - 8, 4, w - 8, h - 8, w * 0.34)
+  corner.addColorStop(0, 'rgba(140, 100, 16, 0.16)')
+  corner.addColorStop(1, 'rgba(140, 100, 16, 0)')
+  ctx.fillStyle = corner
+  ctx.fillRect(0, 0, w, h)
+  const topLeft = ctx.createRadialGradient(6, 6, 2, 6, 6, w * 0.2)
+  topLeft.addColorStop(0, 'rgba(120, 90, 14, 0.10)')
+  topLeft.addColorStop(1, 'rgba(120, 90, 14, 0)')
+  ctx.fillStyle = topLeft
+  ctx.fillRect(0, 0, w, h)
+
+  // borda interna de relevo do papel
+  ctx.strokeStyle = 'rgba(130, 96, 14, 0.22)'
+  ctx.lineWidth = 3
+  ctx.strokeRect(2, 2, w - 4, h - 4)
+
+  // grão de papel
+  for (let i = 0; i < 900; i++) {
+    ctx.fillStyle = `rgba(96, 68, 4, ${0.015 + seeded(i) * 0.035})`
+    ctx.fillRect(seeded(i + 8) * w, seeded(i + 9) * h, 1.6, 1.6)
+  }
+
+  // -------- texto à mão (marcador/caneta grossa, informal mas legível) --------
+  const ink = '#1e2a4f'
+  type Line = { t: string; s: number; em?: boolean }
+  const lines: Line[] = [
+    { t: 'Quem enviar', s: 46 },
+    { t: 'R$25,00 ou mais', s: 64, em: true },
+    { t: 'terá o nome', s: 46 },
+    { t: 'escrito nos foguetes', s: 52 },
+  ]
+  const FONT = (px: number) => `700 ${px}px "Kalam", "Segoe Print", cursive`
+  const maxW = 436
+
+  // encolhe o conjunto proporcionalmente se a linha mais larga passar do papel
+  let widest = 0
+  ctx.font = FONT(100)
+  for (const ln of lines) widest = Math.max(widest, (ctx.measureText(ln.t).width * ln.s) / 100)
+  const fit = Math.min(1, maxW / widest)
+
+  const drawn = lines.map((ln) => ({ ...ln, s: ln.s * fit }))
+  const lineH = 1.22
+  const blockH = drawn.reduce((acc, ln) => acc + ln.s * lineH, 0)
+  let y = h * 0.53 - blockH / 2 + drawn[0].s * lineH * 0.5
+
   ctx.save()
-  ctx.translate(w / 2, h / 2)
-  ctx.rotate(-0.045)
+  ctx.translate(w / 2, 0)
+  ctx.rotate(-0.035)
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.font = '600 21px "Kalam", "Segoe Print", cursive'
-  ctx.fillStyle = '#241a10'
-  const lines = ['Quem mandar', 'R$25,00 ou +', 'terá o nome', 'assinado no', 'foguete!']
-  const lineH = 33
-  lines.forEach((ln, i) => {
-    // passa de tinta + linha principal (caneta real)
-    ctx.globalAlpha = 0.45
-    ctx.fillText(ln, 1.2, -12 + i * lineH - 30 + 1.4)
-    ctx.globalAlpha = 0.95
-    ctx.fillText(ln, 0.6, -12 + i * lineH - 30 + 0.7)
+  ctx.fillStyle = ink
+
+  for (let i = 0; i < drawn.length; i++) {
+    const ln = drawn[i]
+    const jx = (seeded(i + 11) - 0.5) * 5
+    const jr = (seeded(i + 21) - 0.5) * 0.022
+
+    ctx.save()
+    ctx.translate(jx, y)
+    ctx.rotate(jr)
+    ctx.font = FONT(ln.s)
+
+    if (ln.em) {
+      // marca-texto sutil atrás da linha de preço
+      ctx.save()
+      ctx.globalAlpha = 0.20
+      ctx.fillStyle = '#e8912c'
+      const tw = ctx.measureText(ln.t).width
+      ctx.fillRect(-tw / 2 - 8, -ln.s * 0.44, tw + 16, ln.s * 0.92)
+      ctx.restore()
+      ctx.fillStyle = ink
+    }
+
+    // passe duplo de tinta (caneta real: fantasma + núcleo)
+    ctx.globalAlpha = 0.38
+    ctx.fillText(ln.t, 1.6, 1.5)
+    ctx.globalAlpha = 0.92
+    ctx.fillText(ln.t, 0.7, 0.7)
     ctx.globalAlpha = 1
-    ctx.fillText(ln, 0, -12 + i * lineH - 30)
-  })
-  // sublinhado manual em "foguete!"
-  ctx.strokeStyle = '#241a10'
-  ctx.lineWidth = 2.4
-  ctx.globalAlpha = 0.9
-  ctx.beginPath()
-  ctx.moveTo(w / 2 - 40, 102)
-  ctx.quadraticCurveTo(w / 2, 108, w / 2 + 40, 101)
-  ctx.stroke()
-  ctx.globalAlpha = 1
+    ctx.fillText(ln.t, 0, 0)
+
+    if (ln.em) {
+      // sublinhado manual, levemente torto, sob "R$25,00 ou mais"
+      const tw = ctx.measureText(ln.t).width
+      ctx.strokeStyle = ink
+      ctx.globalAlpha = 0.9
+      ctx.lineWidth = Math.max(3, ln.s * 0.075)
+      ctx.lineCap = 'round'
+      ctx.beginPath()
+      ctx.moveTo(-tw / 2 - 2, ln.s * 0.46)
+      ctx.quadraticCurveTo(0, ln.s * 0.56, tw / 2 + 3, ln.s * 0.44)
+      ctx.stroke()
+      ctx.lineWidth = Math.max(1.6, ln.s * 0.035)
+      ctx.globalAlpha = 0.55
+      ctx.beginPath()
+      ctx.moveTo(-tw / 2 + 6, ln.s * 0.56)
+      ctx.quadraticCurveTo(2, ln.s * 0.63, tw / 2 - 4, ln.s * 0.54)
+      ctx.stroke()
+      ctx.globalAlpha = 1
+      ctx.fillStyle = ink
+    }
+
+    ctx.restore()
+    y += ln.s * lineH
+  }
   ctx.restore()
+
   return makeTexture(canvas)
 }
 
@@ -1066,3 +1175,11 @@ export function makePaperWithQr(width = 320, height = 320, quietZone = 2): THREE
   }
   return makeTexture(canvas)
 }
+
+/* -------------------------- folha de rascunho técnico --------------------------
+ * (removida na curadoria: a quadriculada atravessava a impressora. Mantida a
+ *  folha impressa com QR, que pertence à interação da impressora e sai bem.) */
+
+/* ------------------------------ foto de memória ------------------------------
+ * (removida na curadoria: pequena demais e quase invisível na parede. O pôster
+ *  e o CRT seguram a parede; a memória do Ícaro vive na tela.) */

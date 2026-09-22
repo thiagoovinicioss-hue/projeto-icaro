@@ -1580,47 +1580,6 @@ code {
   letter-spacing: 0.04em;
 }
 
-/* ---------------------------------- transparency */
-
-.transparency-table {
-  margin-top: var(--sp-4);
-  border-collapse: collapse;
-  width: 100%;
-  max-width: 640px;
-  font-size: var(--text-base);
-}
-
-.transparency-table th,
-.transparency-table td {
-  padding: var(--sp-3) 6px;
-  border-bottom: 1px solid var(--hairline);
-  text-align: left;
-  vertical-align: baseline;
-}
-
-.transparency-table th {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  width: 44%;
-  font-weight: 500;
-}
-
-.transparency-table td {
-  font-family: var(--font-display);
-  font-weight: 600;
-  text-align: right;
-  color: var(--white);
-  font-variant-numeric: tabular-nums;
-}
-
-.transparency-table td.muted,
-.transparency-table .pending-content {
-  font-family: inherit;
-}
-
 /* ---------------------------------- support (caminho rápido, 2D) */
 
 .support-shell {
@@ -2685,18 +2644,16 @@ html[data-cine-pause] .static-stars span {
 }
 
 /* ---------------------------------- mission-data band
-   progresso · transparência · apoio are the "mission instruments" —
+   progresso · apoio are the "mission instruments" —
    a soft navy field ties them into one continuous beat without
    breaking text contrast (text stays on a near-black composite). */
 
 .chapter--progress,
-.chapter--transparency,
 .chapter--support {
   position: relative;
 }
 
 .chapter--progress::before,
-.chapter--transparency::before,
 .chapter--support::before {
   content: "";
   position: absolute;

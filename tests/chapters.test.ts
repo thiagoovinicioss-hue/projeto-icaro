@@ -20,7 +20,7 @@ describe('chapters', () => {
   it('are in fixed order with unique ids and valid weights', () => {
     const ids = new Set(CHAPTERS.map((c) => c.id))
     expect(ids.size).toBe(CHAPTERS.length)
-    expect(CHAPTERS).toHaveLength(10)
+    expect(CHAPTERS).toHaveLength(9)
     for (const c of CHAPTERS) {
       expect(c.weight).toBeGreaterThanOrEqual(0.9)
       expect(c.weight).toBeLessThanOrEqual(1.5)

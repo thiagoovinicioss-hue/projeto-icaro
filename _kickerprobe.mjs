@@ -11,11 +11,11 @@ const { scrollable } = await page.evaluate(() => ({
 }))
 
 // For each chapter: measure scrollY when section top ENTERS viewport, and when kicker rvs>=0.6
-const ids = ['quem-somos', 'comeco', 'classificacao', 'jornada', 'meta', 'progresso', 'transparencia', 'apoio', 'lancamento']
+const ids = ['quem-somos', 'comeco', 'classificacao', 'jornada', 'meta', 'progresso', 'apoio', 'lancamento']
 
 async function measure(scrY) {
   return page.evaluate(() => {
-    const ids = ['quem-somos', 'comeco', 'classificacao', 'jornada', 'meta', 'progresso', 'transparencia', 'apoio', 'lancamento']
+    const ids = ['quem-somos', 'comeco', 'classificacao', 'jornada', 'meta', 'progresso', 'apoio', 'lancamento']
     const out = {}
     for (const id of ids) {
       const sec = document.getElementById(id)

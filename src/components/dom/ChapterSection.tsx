@@ -8,7 +8,6 @@ import { QualificationSection } from './sections/QualificationSection'
 import { JourneySection } from './sections/JourneySection'
 import { GoalSection } from './sections/GoalSection'
 import { ProgressSection } from './sections/ProgressSection'
-import { TransparencySection } from './sections/TransparencySection'
 import { SupportSection } from './sections/SupportSection'
 import { ClimaxSection } from './sections/ClimaxSection'
 import { ChapterDivider } from './motion/ChapterDivider'
@@ -26,7 +25,6 @@ const KIND_SECTIONS: Record<ChapterKind, ComponentType<{ chapter: Chapter }>> = 
   journey: JourneySection,
   goal: GoalSection,
   progress: ProgressSection,
-  transparency: TransparencySection,
   support: SupportSection,
   climax: ClimaxSection,
 }

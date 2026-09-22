@@ -6,7 +6,6 @@ export type ChapterKind =
   | 'journey'
   | 'goal'
   | 'progress'
-  | 'transparency'
   | 'support'
   | 'climax'
 
@@ -44,7 +43,7 @@ export const CHAPTERS: Chapter[] = [
     align: 'center',
     weight: 1.35,
     tStart: 0.0,
-    tEnd: 0.14,
+    tEnd: 0.1505,
     textContrastMode: 'scrim-center',
   },
   {
@@ -55,8 +54,8 @@ export const CHAPTERS: Chapter[] = [
     kind: 'crew',
     align: 'right',
     weight: 1.05,
-    tStart: 0.14,
-    tEnd: 0.27,
+    tStart: 0.1505,
+    tEnd: 0.2903,
     textContrastMode: 'scrim-right',
   },
   {
@@ -67,8 +66,8 @@ export const CHAPTERS: Chapter[] = [
     kind: 'origin',
     align: 'left',
     weight: 1.0,
-    tStart: 0.27,
-    tEnd: 0.4,
+    tStart: 0.2903,
+    tEnd: 0.4301,
     textContrastMode: 'scrim-left',
   },
   {
@@ -79,8 +78,8 @@ export const CHAPTERS: Chapter[] = [
     kind: 'qualification',
     align: 'center',
     weight: 1.3,
-    tStart: 0.4,
-    tEnd: 0.53,
+    tStart: 0.4301,
+    tEnd: 0.5699,
     textContrastMode: 'scrim-center',
   },
   {
@@ -91,8 +90,8 @@ export const CHAPTERS: Chapter[] = [
     kind: 'journey',
     align: 'left',
     weight: 0.95,
-    tStart: 0.53,
-    tEnd: 0.64,
+    tStart: 0.5699,
+    tEnd: 0.6881,
     textContrastMode: 'scrim-left',
   },
   {
@@ -103,8 +102,8 @@ export const CHAPTERS: Chapter[] = [
     kind: 'goal',
     align: 'right',
     weight: 1.05,
-    tStart: 0.64,
-    tEnd: 0.74,
+    tStart: 0.6881,
+    tEnd: 0.7957,
     textContrastMode: 'scrim-right',
   },
   {
@@ -115,21 +114,9 @@ export const CHAPTERS: Chapter[] = [
     kind: 'progress',
     align: 'center',
     weight: 1.2,
-    tStart: 0.74,
-    tEnd: 0.83,
+    tStart: 0.7957,
+    tEnd: 0.8925,
     textContrastMode: 'scrim-center',
-  },
-  {
-    id: 'transparencia',
-    navLabel: 'Transparência',
-    kicker: 'Transparência da missão',
-    title: 'Os números, sem maquiagem.',
-    kind: 'transparency',
-    align: 'right',
-    weight: 0.95,
-    tStart: 0.83,
-    tEnd: 0.9,
-    textContrastMode: 'scrim-right',
   },
   {
     id: 'apoio',
@@ -139,8 +126,8 @@ export const CHAPTERS: Chapter[] = [
     kind: 'support',
     align: 'center',
     weight: 1.25,
-    tStart: 0.9,
-    tEnd: 0.955,
+    tStart: 0.8925,
+    tEnd: 0.9516,
     textContrastMode: 'scrim-center',
   },
   {
@@ -151,7 +138,7 @@ export const CHAPTERS: Chapter[] = [
     kind: 'climax',
     align: 'center',
     weight: 1.5,
-    tStart: 0.955,
+    tStart: 0.9516,
     tEnd: 1.0,
     textContrastMode: 'scrim-center',
   },
